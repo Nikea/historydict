@@ -17,25 +17,25 @@ import json
 logger = logging.getLogger(__name__)
 
 
-TABLE_NAME = 'ReplayConfiguration_1_0'
+TABLE_NAME = 'HISTORY_1_0'
 CREATION_QUERY = """
 CREATE TABLE {0} (
-        run_id CHAR(40),
+        _id CHAR(40),
         N INT,
         blob BLOB)""".format(TABLE_NAME)
 INSERTION_QUERY = """
 INSERT INTO {0}
-(run_id, N, blob)
+(_id, N, blob)
 VALUES
 (?,
 1 + (SELECT COALESCE(MAX(N), 0)
      FROM {0}
-     WHERE run_id=?),
+     WHERE _id=?),
 ?)""".format(TABLE_NAME)
 SELECTION_QUERY = """
 SELECT blob
 FROM {0}
-WHERE run_id=? ORDER BY N DESC LIMIT ?""".format(TABLE_NAME)
+WHERE _id=? ORDER BY N DESC LIMIT ?""".format(TABLE_NAME)
 SHOW_TABLES_QUERY = """SELECT name FROM sqlite_master WHERE type='table'"""
 
 
