@@ -57,6 +57,12 @@ class History(object):
         else:
             logger.debug("Found a replay configuration table in %s", fname)
 
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, val):
+        return self.put(key, val)
+
     def get(self, key, num_back=0):
         """
         Retrieve a past state of the data payload associated with `key`,
