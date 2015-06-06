@@ -51,11 +51,11 @@ class History(object):
     def __init__(self, fname):
         self._conn = sqlite3.connect(fname)
         if not self._has_tables():
-            logger.debug("Created a fresh replay configuration table in %s,",
+            logger.debug("Created a fresh table in %s,",
                          fname)
             self._create_tables()
         else:
-            logger.debug("Found a replay configuration table in %s", fname)
+            logger.debug("Found an existing table in %s", fname)
 
     def __getitem__(self, key):
         return self.get(key)
