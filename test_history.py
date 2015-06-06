@@ -30,6 +30,12 @@ def test_history():
     assert_equal(result1, config1)
 
 
+def test_clear():
+    h.put('hi', 'mom')
+    h.clear()
+    assert_raises(KeyError, lambda: h.get('hi'))
+
+
 def test_trim():
     assert_raises(NotImplementedError, h.trim)
 
