@@ -6,7 +6,7 @@ python:
 
 install:
   - python setup.py install
-  - pip install coveralls
+  - pip install coveralls six
 
 script:
   - python run_tests.py
