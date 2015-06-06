@@ -37,6 +37,7 @@ SELECT blob
 FROM {0}
 WHERE _id=? ORDER BY N DESC LIMIT ?""".format(TABLE_NAME)
 SHOW_TABLES_QUERY = """SELECT name FROM sqlite_master WHERE type='table'"""
+DELETION_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
 
 
 class History(object):
@@ -111,6 +112,9 @@ class History(object):
         data_str = json.dumps(data)
         self._conn.execute(INSERTION_QUERY, (key, key, data_str))  # yes, twice
         self._conn.commit()
+
+    def clear(self):
+        self._conn.execute(DELETION_QUERY)
 
     def trim(self, N=1):
         """
