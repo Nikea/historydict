@@ -37,6 +37,7 @@ SELECT blob
 FROM {0}
 WHERE _id=? ORDER BY N DESC LIMIT ?""".format(TABLE_NAME)
 SHOW_TABLES_QUERY = """SELECT name FROM sqlite_master WHERE type='table'"""
+DELETION_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
 
 
 class History(object):
@@ -88,7 +89,10 @@ class History(object):
 
         key = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         res = self._conn.execute(SELECTION_QUERY, (key, 1 + num_back))
-        blob, = res.fetchall()[-1]
+        try:
+            blob, = res.fetchall()[-1]
+        except IndexError:
+            raise KeyError("No such data key in the database.")
         return json.loads(blob)
 
     def put(self, key, data):
@@ -108,6 +112,9 @@ class History(object):
         data_str = json.dumps(data)
         self._conn.execute(INSERTION_QUERY, (key, key, data_str))  # yes, twice
         self._conn.commit()
+
+    def clear(self):
+        self._conn.execute(DELETION_QUERY)
 
     def trim(self, N=1):
         """
