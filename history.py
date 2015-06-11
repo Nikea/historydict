@@ -54,6 +54,7 @@ class History(MutableMapping):
     RESERVED_KEY_KEY = '__list_of_currently_known_about_keys'
 
     def __init__(self, fname):
+        self._cache = {}
         self._conn = sqlite3.connect(fname)
         if not self._has_tables():
             logger.debug("Created a fresh table in %s,",
@@ -62,8 +63,11 @@ class History(MutableMapping):
         else:
             logger.debug("Found an existing table in %s", fname)
 
+        for k in self:
+            self._cache[k] = self.get(k)
+
     def __getitem__(self, key):
-        return self.get(key)
+        return self._cache[key]
 
     def __setitem__(self, key, val):
         return self.put(key, val)
@@ -106,13 +110,18 @@ class History(MutableMapping):
         if num_back < 0:
             raise ValueError("num_back must be nonnegative")
 
+        if num_back == 0 and key in self._cache:
+            return self._cache[key]
+
         key = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         res = self._conn.execute(SELECTION_QUERY, (key, 1 + num_back))
         try:
             blob, = res.fetchall()[-1]
         except IndexError:
             raise KeyError("No such data key in the database.")
-        return json.loads(blob)
+        v = json.loads(blob)
+        self._cache[key] = v
+        return v
 
     def put(self, key, data):
         """
@@ -127,19 +136,22 @@ class History(MutableMapping):
             The data to be stored.  Can be any object that
             json can serialize.
         """
-        hkey = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
+        hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         data_str = json.dumps(data)
-        self._conn.execute(INSERTION_QUERY, (hkey, hkey, data_str))  # yes, twice
+        self._conn.execute(INSERTION_QUERY, (hk, hk, data_str))  # yes, twice
         self._conn.commit()
-        cur_keys = self[self.RESERVED_KEY_KEY]
+
+        cur_keys = self.get(self.RESERVED_KEY_KEY)
         if key != self.RESERVED_KEY_KEY and key not in cur_keys:
 
             cur_keys.append(key)
             self[self.RESERVED_KEY_KEY] = list(cur_keys)
+        self._cache[key] = data
 
     def clear(self):
         self._conn.execute(DELETION_QUERY)
         self.put(self.RESERVED_KEY_KEY, [])
+        self._cache = dict()
 
     def trim(self, N=1):
         """
