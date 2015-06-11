@@ -69,7 +69,7 @@ class History(MutableMapping):
         return self.put(key, val)
 
     def __iter__(self):
-        yield from self.get(self.RESERVED_KEY_KEY)
+        return iter(self.get(self.RESERVED_KEY_KEY))
 
     def __delitem__(self, key):
         cur_keys = self[self.RESERVED_KEY_KEY]
