@@ -12,7 +12,7 @@ import logging
 import hashlib
 import sqlite3
 import json
-
+from collections import MutableMapping
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ SHOW_TABLES_QUERY = """SELECT name FROM sqlite_master WHERE type='table'"""
 DELETION_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
 
 
-class History(object):
+class History(MutableMapping):
     """
     A helper class to make persisting configuration data easy.
 
@@ -48,7 +48,11 @@ class History(object):
     data base which has a column for the key, the number of times
     the key has been seen, and the data stored as a json-encoded blob.
 
+    The key '__list_of_currently_known_about_keys' is reserved.
+
     """
+    RESERVED_KEY_KEY = '__list_of_currently_known_about_keys'
+
     def __init__(self, fname):
         self._conn = sqlite3.connect(fname)
         if not self._has_tables():
@@ -63,6 +67,21 @@ class History(object):
 
     def __setitem__(self, key, val):
         return self.put(key, val)
+
+    def __iter__(self):
+        return iter(self.get(self.RESERVED_KEY_KEY))
+
+    def __delitem__(self, key):
+        cur_keys = self[self.RESERVED_KEY_KEY]
+        if key not in cur_keys:
+            raise KeyError(key)
+        cur_keys.remove(key)
+        # INSERT SQL QUERY TO DELETE ALL INFO ABOUT THIS KEY
+        self[self.RESERVED_KEY_KEY] = cur_keys
+        raise NotImplementedError()
+
+    def __len__(self):
+        return len(self[self.RESERVED_KEY_KEY])
 
     def get(self, key, num_back=0):
         """
@@ -108,13 +127,19 @@ class History(object):
             The data to be stored.  Can be any object that
             json can serialize.
         """
-        key = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
+        hkey = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         data_str = json.dumps(data)
-        self._conn.execute(INSERTION_QUERY, (key, key, data_str))  # yes, twice
+        self._conn.execute(INSERTION_QUERY, (hkey, hkey, data_str))  # yes, twice
         self._conn.commit()
+        cur_keys = self[self.RESERVED_KEY_KEY]
+        if key != self.RESERVED_KEY_KEY and key not in cur_keys:
+
+            cur_keys.append(key)
+            self[self.RESERVED_KEY_KEY] = list(cur_keys)
 
     def clear(self):
         self._conn.execute(DELETION_QUERY)
+        self.put(self.RESERVED_KEY_KEY, [])
 
     def trim(self, N=1):
         """
@@ -133,6 +158,7 @@ class History(object):
         Create the required tables for data storage
         """
         self._conn.execute(CREATION_QUERY)
+        self.put(self.RESERVED_KEY_KEY, [])
 
     def _has_tables(self):
         """

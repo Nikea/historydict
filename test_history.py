@@ -58,3 +58,34 @@ def test_opening():
 
     h2 = History(filename)
     assert_equal(h2['aardvark'], 'ants')
+
+
+def test_iter():
+    h.clear()
+    keys = set('abcd')
+    for k in keys:
+        h[k] = k
+    for k, v in h.items():
+        assert_equal(k, v)
+
+
+def test_no_del():
+    h.clear()
+    h['a'] = 123
+    with assert_raises(NotImplementedError):
+        del h['a']
+
+
+def test_no_key_in_del():
+    h.clear()
+    with assert_raises(KeyError):
+        del h['aardvark']
+
+
+def test_len():
+    h.clear()
+    keys = set('abcd')
+    for k in keys:
+        h[k] = k
+
+    assert_equal(len(keys), len(h))
