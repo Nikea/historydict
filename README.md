@@ -24,17 +24,17 @@ Out[5]: 'foo'
 
 ```
 
-via `put` and `get`
+via `put` and `past`
 
 ```python
 In [6]: hist.put('k', 'bar')
 
-In [7]: hist.get('k')
+In [7]: hist.past('k')
 Out[7]: 'bar'
 
 ```
 
-Using `get` you can extract past values
+Using `past` you can extract past values
 
 ```python
 In [8]: hist['key'] = 'baz'
@@ -48,17 +48,18 @@ In [11]:
 In [11]: hist['key']
 Out[11]: 'aardvark'
 
-In [12]: hist.get('key', 1)
+In [12]: hist.past('key', 1)
 Out[12]: 'buz'
 
-In [13]: hist.get('key', 2)
+In [13]: hist.past('key', 2)
 Out[13]: 'baz'
 
-In [14]: hist.get('key', 3)
+In [14]: hist.past('key', 3)
 Out[14]: 'foo'
 
 ```
 
+All `MutableMapping` methods except `del` and `pop` work.
 
 
 ## Known limitation
@@ -76,3 +77,6 @@ string representations.
 
 The values are stored via a json blob, thus only values which can be
 converted to json can be stored (no numpy arrays currently).
+
+`h.del` and `h.pop` do not work (yet).  Just need to write the
+sql query to delete them.

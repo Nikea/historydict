@@ -14,26 +14,26 @@ def setup():
 
 def test_history():
     run_id = ''.join(['a'] * OBJ_ID_LEN)
-    # Simple round-trip: put and get
+    # Simple round-trip: put and past
     config1 = {'plot_x': 'long', 'plot_y': 'island'}
     h.put(run_id, config1)
-    result1 = h.get(run_id)
+    result1 = h.past(run_id)
     assert_equal(result1, config1)
 
-    # Put a second entry. Check that get returns most recent.
+    # Put a second entry. Check that past returns most recent.
     config2 = {'plot_x': 'new', 'plot_y': 'york'}
     h.put(run_id, config2)
-    result2 = h.get(run_id)
+    result2 = h.past(run_id)
     assert_equal(result2, config2)
-    # And get(..., 1) returns previous.
-    result1 = h.get(run_id, 1)
+    # And.past(..., 1) returns previous.
+    result1 = h.past(run_id, 1)
     assert_equal(result1, config1)
 
 
 def test_clear():
     h.put('hi', 'mom')
     h.clear()
-    assert_raises(KeyError, lambda: h.get('hi'))
+    assert_raises(KeyError, lambda: h.past('hi'))
 
 
 def test_trim():
@@ -41,7 +41,7 @@ def test_trim():
 
 
 def test_neg_numback_fails():
-    assert_raises(ValueError, h.get, 'test', -1)
+    assert_raises(ValueError, h.past, 'test', -1)
 
 
 def test_gs_items():
@@ -89,3 +89,9 @@ def test_len():
         h[k] = k
 
     assert_equal(len(keys), len(h))
+
+
+def test_get():
+    h.clear()
+    b = h.get('b', 'aardvark')
+    assert_equal(b, 'aardvark')

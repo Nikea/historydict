@@ -62,9 +62,9 @@ class History(MutableMapping):
             self._create_tables()
         else:
             logger.debug("Found an existing table in %s", fname)
-        self._keys = self.get(self.RESERVED_KEY_KEY)
+        self._keys = self.past(self.RESERVED_KEY_KEY)
         for k in self._keys:
-            self._cache[k] = self.get(k)
+            self._cache[k] = self.past(k)
 
     def __getitem__(self, key):
         if key == self.RESERVED_KEY_KEY:
@@ -93,7 +93,7 @@ class History(MutableMapping):
     def __len__(self):
         return len(self._cache)
 
-    def get(self, key, num_back=0):
+    def past(self, key, num_back=0):
         """
         Retrieve a past state of the data payload associated with `key`,
         by default the most recent state.  Previous states can be accessed
