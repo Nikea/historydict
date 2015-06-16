@@ -72,6 +72,9 @@ class History(MutableMapping):
         return self._cache[key]
 
     def __setitem__(self, key, val):
+        if key == self.RESERVED_KEY_KEY:
+            raise ValueError("can not set internal keys through []")
+
         return self.put(key, val)
 
     def __iter__(self):
@@ -87,7 +90,7 @@ class History(MutableMapping):
         cur_keys = list(self._cache)
         cur_keys.remove(key)
         # INSERT SQL QUERY TO DELETE ALL INFO ABOUT THIS KEY
-        self[self.RESERVED_KEY_KEY] = cur_keys
+        self.put(self.RESERVED_KEY_KEY, cur_keys)
         raise NotImplementedError()
 
     def __len__(self):
