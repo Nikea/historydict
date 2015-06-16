@@ -95,3 +95,10 @@ def test_get():
     h.clear()
     b = h.get('b', 'aardvark')
     assert_equal(b, 'aardvark')
+
+
+def test_protected_key():
+    assert_raises(ValueError, h.__getitem__,
+                  History.RESERVED_KEY_KEY)
+    assert_raises(ValueError, h.__setitem__,
+                  History.RESERVED_KEY_KEY, 'aardvark')
