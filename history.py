@@ -68,7 +68,7 @@ class History(MutableMapping):
 
     def __getitem__(self, key):
         if key == self.RESERVED_KEY_KEY:
-            raise ValueError("can not.past internal keys through []")
+            raise ValueError("can not get internal keys through []")
         return self._cache[key]
 
     def __setitem__(self, key, val):
@@ -98,7 +98,7 @@ class History(MutableMapping):
         Retrieve a past state of the data payload associated with `key`,
         by default the most recent state.  Previous states can be accessed
         via the `num_back` kwarg which will retrieve the nth back entry (so
-        `num_back=0` get the latest, `num_back=5`.pasts the fifth most recent.
+        `num_back=0` get the latest, `num_back=5` gets the fifth most recent.
 
         Parameters
         ----------
