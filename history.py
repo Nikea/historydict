@@ -54,6 +54,7 @@ class History(MutableMapping):
     RESERVED_KEY_KEY = '__list_of_currently_known_about_keys'
 
     def __init__(self, fname):
+        self._cache = {}
         self._conn = sqlite3.connect(fname)
         if not self._has_tables():
             logger.debug("Created a fresh table in %s,",
@@ -61,27 +62,36 @@ class History(MutableMapping):
             self._create_tables()
         else:
             logger.debug("Found an existing table in %s", fname)
+        self._keys = self.get(self.RESERVED_KEY_KEY)
+        for k in self._keys:
+            self._cache[k] = self.get(k)
 
     def __getitem__(self, key):
-        return self.get(key)
+        if key == self.RESERVED_KEY_KEY:
+            raise ValueError("can not get internal keys through []")
+        return self._cache[key]
 
     def __setitem__(self, key, val):
         return self.put(key, val)
 
     def __iter__(self):
-        return iter(self.get(self.RESERVED_KEY_KEY))
+        return iter(self._cache)
+
+    def __contains__(self, k):
+        return k in self._cache
 
     def __delitem__(self, key):
-        cur_keys = self[self.RESERVED_KEY_KEY]
-        if key not in cur_keys:
+
+        if key not in self:
             raise KeyError(key)
+        cur_keys = list(self._cache)
         cur_keys.remove(key)
         # INSERT SQL QUERY TO DELETE ALL INFO ABOUT THIS KEY
         self[self.RESERVED_KEY_KEY] = cur_keys
         raise NotImplementedError()
 
     def __len__(self):
-        return len(self[self.RESERVED_KEY_KEY])
+        return len(self._cache)
 
     def get(self, key, num_back=0):
         """
@@ -106,13 +116,19 @@ class History(MutableMapping):
         if num_back < 0:
             raise ValueError("num_back must be nonnegative")
 
-        key = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
-        res = self._conn.execute(SELECTION_QUERY, (key, 1 + num_back))
+        if num_back == 0 and key in self._cache:
+            return self._cache[key]
+
+        hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
+        res = self._conn.execute(SELECTION_QUERY, (hk, 1 + num_back))
         try:
             blob, = res.fetchall()[-1]
         except IndexError:
             raise KeyError("No such data key in the database.")
-        return json.loads(blob)
+        v = json.loads(blob)
+        if key != self.RESERVED_KEY_KEY:
+            self._cache[key] = v
+        return v
 
     def put(self, key, data):
         """
@@ -127,19 +143,24 @@ class History(MutableMapping):
             The data to be stored.  Can be any object that
             json can serialize.
         """
-        hkey = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
+        hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         data_str = json.dumps(data)
-        self._conn.execute(INSERTION_QUERY, (hkey, hkey, data_str))  # yes, twice
+        self._conn.execute(INSERTION_QUERY, (hk, hk, data_str))  # yes, twice
         self._conn.commit()
-        cur_keys = self[self.RESERVED_KEY_KEY]
-        if key != self.RESERVED_KEY_KEY and key not in cur_keys:
 
-            cur_keys.append(key)
-            self[self.RESERVED_KEY_KEY] = list(cur_keys)
+        if key != self.RESERVED_KEY_KEY:
+            # if we don't know about it, add it to the list of keys
+            if key not in self:
+                cur_keys = list(self._cache)
+                cur_keys.append(key)
+                self.put(self.RESERVED_KEY_KEY, cur_keys)
+            # update the cache
+            self._cache[key] = data
 
     def clear(self):
         self._conn.execute(DELETION_QUERY)
         self.put(self.RESERVED_KEY_KEY, [])
+        self._cache = dict()
 
     def trim(self, N=1):
         """
