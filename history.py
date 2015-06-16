@@ -17,7 +17,7 @@ from collections import MutableMapping
 logger = logging.getLogger(__name__)
 
 
-TABLE_NAME = 'HISTORY_1_0'
+TABLE_NAME = 'HISTORY_1_1'
 CREATION_QUERY = """
 CREATE TABLE {0} (
         _id CHAR(40),
