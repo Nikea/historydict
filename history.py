@@ -37,7 +37,8 @@ SELECT blob
 FROM {0}
 WHERE _id=? ORDER BY N DESC LIMIT ?""".format(TABLE_NAME)
 SHOW_TABLES_QUERY = """SELECT name FROM sqlite_master WHERE type='table'"""
-DELETION_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
+DELETE_ALL_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
+DELETE_ONE_QUERY = "DELETE FROM {0} WHERE _id=?".format(TABLE_NAME)
 
 
 class History(MutableMapping):
@@ -84,14 +85,14 @@ class History(MutableMapping):
         return k in self._cache
 
     def __delitem__(self, key):
-
         if key not in self:
             raise KeyError(key)
         cur_keys = list(self._cache)
         cur_keys.remove(key)
-        # INSERT SQL QUERY TO DELETE ALL INFO ABOUT THIS KEY
         self.put(self.RESERVED_KEY_KEY, cur_keys)
-        raise NotImplementedError()
+        del self._cache[key]
+        hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
+        self._conn.execute(DELETE_ONE_QUERY, (hk,))
 
     def __len__(self):
         return len(self._cache)
@@ -161,9 +162,9 @@ class History(MutableMapping):
             self._cache[key] = data
 
     def clear(self):
-        self._conn.execute(DELETION_QUERY)
+        self._conn.execute(DELETE_ALL_QUERY)
         self.put(self.RESERVED_KEY_KEY, [])
-        self._cache = dict()
+        self._cache.clear()
 
     def trim(self, N=1):
         """
