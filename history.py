@@ -124,11 +124,12 @@ class History(MutableMapping):
             return self._cache[key]
 
         hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
-        res = self._conn.execute(SELECTION_QUERY, (hk, 1 + num_back))
-        try:
-            blob, = res.fetchall()[-1]
-        except IndexError:
+        res = self._conn.execute(SELECTION_QUERY, (hk, 1+num_back)).fetchall()
+        if len(res) == 0:
             raise KeyError("No such data key in the database.")
+        if len(res) < 1 + num_back:
+            raise ValueError("There are only %d values in history." % len(res))
+        blob, = res[-1]
         v = json.loads(blob)
         if key != self.RESERVED_KEY_KEY:
             self._cache[key] = v

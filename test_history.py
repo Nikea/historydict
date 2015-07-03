@@ -42,6 +42,13 @@ def test_neg_numback_fails():
     assert_raises(ValueError, h.past, 'test', -1)
 
 
+def test_nonexistent_past_fails():
+    h['cats'] = 123
+    assert_raises(ValueError, h.past, 'cats', 1)
+    h['cats'] = 456
+    h.past('cats', 1)  # should not raise
+
+
 def test_gs_items():
     h[123] = 'aardvark'
     assert_equal(h[123], 'aardvark')
