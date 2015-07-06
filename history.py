@@ -131,7 +131,7 @@ class History(MutableMapping):
             raise ValueError("There are only %d values in history." % len(res))
         blob, = res[-1]
         v = json.loads(blob)
-        if key != self.RESERVED_KEY_KEY:
+        if (num_back == 0) and (key != self.RESERVED_KEY_KEY):
             self._cache[key] = v
         return v
 
