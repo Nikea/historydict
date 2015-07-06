@@ -120,9 +120,6 @@ class History(MutableMapping):
         if num_back < 0:
             raise ValueError("num_back must be nonnegative")
 
-        if num_back == 0 and key in self._cache:
-            return self._cache[key]
-
         hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         res = self._conn.execute(SELECTION_QUERY, (hk, 1+num_back)).fetchall()
         if len(res) == 0:
@@ -131,8 +128,6 @@ class History(MutableMapping):
             raise ValueError("There are only %d values in history." % len(res))
         blob, = res[-1]
         v = json.loads(blob)
-        if key != self.RESERVED_KEY_KEY:
-            self._cache[key] = v
         return v
 
     def put(self, key, data):
