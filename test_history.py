@@ -88,6 +88,7 @@ def test_del():
     assert_equal(h['a'], 789)
     assert_equal(h.past('a', 0), 789)
 
+
 def test_no_key_in_del():
     h.clear()
     with assert_raises(KeyError):
@@ -114,3 +115,13 @@ def test_protected_key():
                   History.RESERVED_KEY_KEY)
     assert_raises(ValueError, h.__setitem__,
                   History.RESERVED_KEY_KEY, 'aardvark')
+
+
+def test_repr():
+    h.clear()
+    kvpairs = (('foo', 'bar'), ('spam', 'spam spam spam'))
+    dct = {}
+    for k, v in kvpairs:
+        dct[k] = v
+        h[k] = v
+    assert_equal(repr(h), repr(dct))
