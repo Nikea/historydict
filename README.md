@@ -86,3 +86,12 @@ converted to json can be stored (no numpy arrays currently).
 
 `h.del` and `h.pop` do not work (yet).  Just need to write the
 sql query to delete them.
+
+
+####Build Matrix
+Python version | build 
+----|-------
+2.7 | .1
+3.4 | .2
+
+[![Build Status](https://travis-matrix-badges.herokuapp.com/repos/Nikea/history/branches/master)](https://travis-ci.org/Nikea/history)
