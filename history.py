@@ -66,9 +66,10 @@ class History(MutableMapping):
         self._keys = self.past(self.RESERVED_KEY_KEY)
         for k in self._keys:
             self._cache[k] = self.past(k)
+
     def __repr__(self):
         return repr(dict(self))
-        
+
     def __getitem__(self, key):
         if key == self.RESERVED_KEY_KEY:
             raise ValueError("can not get internal keys through []")
