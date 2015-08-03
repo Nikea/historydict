@@ -84,9 +84,6 @@ string representations.
 The values are stored via a json blob, thus only values which can be
 converted to json can be stored (no numpy arrays currently).
 
-`h.del` and `h.pop` do not work (yet).  Just need to write the
-sql query to delete them.
-
 
 ####Build Matrix
 Python version | build 
