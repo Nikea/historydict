@@ -1,3 +1,9 @@
+###Continuous Integration
+[![Build Status](https://travis-ci.org/Nikea/history.svg?branch=master)](https://travis-ci.org/Nikea/history)
+[![Coverage Status](https://coveralls.io/repos/Nikea/history/badge.svg?branch=master&service=github)](https://coveralls.io/github/Nikea/history?branch=master)
+[![codecov.io](http://codecov.io/github/Nikea/history/coverage.svg?branch=master)](http://codecov.io/github/Nikea/history?branch=master)
+
+
 # History
 
 History is a light weight mapping backed by sqlite which remember the

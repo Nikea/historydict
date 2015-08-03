@@ -6,10 +6,11 @@ python:
 
 install:
   - python setup.py install
-  - pip install coveralls six
+  - pip install coveralls six codecov
 
 script:
   - python run_tests.py
 
 after_success:
-  coveralls
+  - coveralls
+  - codecov
