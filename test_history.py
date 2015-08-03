@@ -124,4 +124,4 @@ def test_repr():
     for k, v in kvpairs:
         dct[k] = v
         h[k] = v
-    assert repr(h) == repr(dct)
+    assert_equal(repr(h), repr(dct))
