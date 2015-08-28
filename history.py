@@ -16,6 +16,9 @@ from collections import MutableMapping
 
 logger = logging.getLogger(__name__)
 
+import theversion
+__version__ = theversion.version(__file__)
+del theversion
 
 TABLE_NAME = 'HISTORY_1_1'
 CREATION_QUERY = """
