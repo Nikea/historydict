@@ -16,6 +16,14 @@ from collections import MutableMapping
 
 logger = logging.getLogger(__name__)
 
+version_metadata = {
+    'version_prefix': 'v',
+    'version_suffix': '.post',
+}
+
+import theversion
+__version__ = theversion.version(__file__, **version_metadata)
+del theversion
 
 TABLE_NAME = 'HISTORY_1_1'
 CREATION_QUERY = """
