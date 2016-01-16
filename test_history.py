@@ -14,13 +14,13 @@ def test_historydict():
     run_id = ''.join(['a'] * OBJ_ID_LEN)
     # Simple round-trip: put and past
     config1 = {'plot_x': 'long', 'plot_y': 'island'}
-    h.put(run_id, config1)
+    h._put(run_id, config1)
     result1 = h.past(run_id)
     assert_equal(result1, config1)
 
     # Put a second entry. Check that past returns most recent.
     config2 = {'plot_x': 'new', 'plot_y': 'york'}
-    h.put(run_id, config2)
+    h._put(run_id, config2)
     result2 = h.past(run_id)
     assert_equal(result2, config2)
     # And.past(..., 1) returns previous.
@@ -29,7 +29,7 @@ def test_historydict():
 
 
 def test_clear():
-    h.put('hi', 'mom')
+    h._put('hi', 'mom')
     h.clear()
     assert_raises(KeyError, lambda: h.past('hi'))
 

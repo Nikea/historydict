@@ -8,7 +8,7 @@ configurations.
 ## Examples
 
 The interface is very simple and can be accessed either via `[]` like
-a dictionary or
+a dictionary
 
 ```python
 In [1]: from historydict import HistoryDict
@@ -24,11 +24,9 @@ Out[5]: 'foo'
 
 ```
 
-via `put` and `past`
+or via `past`
 
 ```python
-In [6]: hist.put('k', 'bar')
-
 In [7]: hist.past('k')
 Out[7]: 'bar'
 
@@ -77,6 +75,3 @@ string representations.
 
 The values are stored via a json blob, thus only values which can be
 converted to json can be stored (no numpy arrays currently).
-
-`h.del` and `h.pop` do not work (yet).  Just need to write the
-sql query to delete them.
