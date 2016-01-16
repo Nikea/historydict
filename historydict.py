@@ -41,7 +41,7 @@ DELETE_ALL_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
 DELETE_ONE_QUERY = "DELETE FROM {0} WHERE _id=?".format(TABLE_NAME)
 
 
-class History(MutableMapping):
+class HistoryDict(MutableMapping):
     """
     A helper class to make persisting configuration data easy.
 

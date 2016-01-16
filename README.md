@@ -1,6 +1,6 @@
-# History
+# HistoryDict
 
-History is a light weight mapping backed by sqlite which remember the
+HistoryDict is a light weight mapping backed by sqlite which remember the
 history of values.  The intent is for tracking relatively complex
 configurations.
 
@@ -11,11 +11,11 @@ The interface is very simple and can be accessed either via `[]` like
 a dictionary or
 
 ```python
-In [1]: from history import History
+In [1]: from historydict import HistoryDict
 
 In [2]: fn = '/tmp/testing'
 
-In [3]: hist = History(fn)
+In [3]: hist = HistoryDict(fn)
 
 In [4]: hist['key'] = 'foo'
 
@@ -59,7 +59,7 @@ Out[14]: 'foo'
 
 ```
 
-All `MutableMapping` methods except `del` and `pop` work.
+All `MutableMapping` methods work.
 
 
 ## Known limitation
