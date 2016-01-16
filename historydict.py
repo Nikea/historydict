@@ -41,7 +41,7 @@ DELETE_ALL_QUERY = "DELETE FROM {0}".format(TABLE_NAME)
 DELETE_ONE_QUERY = "DELETE FROM {0} WHERE _id=?".format(TABLE_NAME)
 
 
-class History(MutableMapping):
+class HistoryDict(MutableMapping):
     """
     A helper class to make persisting configuration data easy.
 
@@ -79,7 +79,7 @@ class History(MutableMapping):
         if key == self.RESERVED_KEY_KEY:
             raise ValueError("can not set internal keys through []")
 
-        return self.put(key, val)
+        return self._put(key, val)
 
     def __iter__(self):
         return iter(self._cache)
@@ -92,7 +92,7 @@ class History(MutableMapping):
             raise KeyError(key)
         cur_keys = list(self._cache)
         cur_keys.remove(key)
-        self.put(self.RESERVED_KEY_KEY, cur_keys)
+        self._put(self.RESERVED_KEY_KEY, cur_keys)
         del self._cache[key]
         hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         self._conn.execute(DELETE_ONE_QUERY, (hk,))
@@ -133,7 +133,7 @@ class History(MutableMapping):
         v = json.loads(blob)
         return v
 
-    def put(self, key, data):
+    def _put(self, key, data):
         """
         Store a data blob into the database
 
@@ -156,13 +156,13 @@ class History(MutableMapping):
             if key not in self:
                 cur_keys = list(self._cache)
                 cur_keys.append(key)
-                self.put(self.RESERVED_KEY_KEY, cur_keys)
+                self._put(self.RESERVED_KEY_KEY, cur_keys)
             # update the cache
             self._cache[key] = data
 
     def clear(self):
         self._conn.execute(DELETE_ALL_QUERY)
-        self.put(self.RESERVED_KEY_KEY, [])
+        self._put(self.RESERVED_KEY_KEY, [])
         self._cache.clear()
 
     def trim(self, N=1):
@@ -182,7 +182,7 @@ class History(MutableMapping):
         Create the required tables for data storage
         """
         self._conn.execute(CREATION_QUERY)
-        self.put(self.RESERVED_KEY_KEY, [])
+        self._put(self.RESERVED_KEY_KEY, [])
 
     def _has_tables(self):
         """

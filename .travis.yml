@@ -4,14 +4,15 @@ python:
   - 2.7
   - 3.3
   - 3.4
-  - "3.5.0b4"
+  - 3.5
+  - "nightly"
   
 install:
   - python setup.py install
-  - pip install coveralls six
+  - pip install six pytest pytest-cov
 
 script:
-  - python run_tests.py
+  - py.test --cov=historydict --cov-report term-missing
 
 after_success:
   coveralls
