@@ -1,8 +1,6 @@
 [![Build
-Status](https://travis-ci.org/Nikea/history.svg?branch=master)](https://travis-ci.org/Nikea/history)
-[![Coverage
-Status](https://coveralls.io/repos/Nikea/history/badge.svg?branch=master&service=github)](https://coveralls.io/github/Nikea/history?branch=master)
-[![codecov.io](http://codecov.io/github/Nikea/history/coverage.svg?branch=master)](http://codecov.io/github/Nikea/history?branch=master)
+Status](https://travis-ci.org/Nikea/historydict.svg?branch=master)](https://travis-ci.org/Nikea/historydict)
+[![codecov.io](http://codecov.io/github/Nikea/historydict/coverage.svg?branch=master)](http://codecov.io/github/Nikea/historydict?branch=master)
 
 # HistoryDict
 
