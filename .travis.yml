@@ -16,9 +16,8 @@ python:
 
 before_install:
   - git clone https://gist.github.com/613e015ad558b9149d33.git ~/scripts
-  - wget https://gist.githubusercontent.com/ericdill/613e015ad558b9149d33/raw/install-miniconda.sh
-  - chmod +x install-miniconda.sh
-  - . install-miniconda.sh
+  - chmod +x ~/scripts/*.sh
+  - . ~/scripts/install-miniconda.sh
   # - git fetch --unshallow
   # - source ~/.bashrc
 install:
@@ -27,14 +26,16 @@ install:
 
 script:
   - py.test --cov=historydict --cov-report term-missing
-  - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) ]] ; then
-      $CONDA_BUILD_COMMAND;
-    fi;
+  - . ~/scripts/conda-build.sh
+  # - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) ]] ; then
+  #     $CONDA_BUILD_COMMAND;
+  #   fi;
 
 after_success:
   - coveralls
-  - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) && ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'auto-build-on-travis' ) ]] ; then
-      anaconda -t ${BINSTAR_TOKEN} upload $($CONDA_BUILD_COMMAND --output) -u lightsource2 -c development --force;
-    fi;
+  - . ~/scripts/anaconda-upload.sh
+  # - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) && ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'auto-build-on-travis' ) ]] ; then
+  #     anaconda -t ${BINSTAR_TOKEN} upload $($CONDA_BUILD_COMMAND --output) -u lightsource2 -c development --force;
+  #   fi;
 
 
