@@ -2,7 +2,9 @@ language: python
 env:
   global:
     - ANACONDA_USER=lightsource2
-    - ANACONDA_CHANNEL="-c development"
+    # if ANACONDA_CHANNEL is not defined then the conda package will be
+    # uploaded to the main channel.
+    - ANACONDA_CHANNEL="development"
     - secure: "hu6ot+paAEZ2yV/f0wyPpUZD16FWeYEAmUi2yYmJL+KWewK/6+Nwf6UMD7vcX3v1tgFOmzjL1LZSkRVFiFF35+bt30uy++5s9xKVzeNLWi7amIj9Q0x2E1iVQmBdCj0qCMpgonGe1VJ/j2ORSfLDzsDjnNDP4VL/Cli8dQM6Kxph6pkosoCvTGuCpN9AO4a3n023XoFgXyLo1JvCoWkV3CtdUko5GQ55es82MYCQ1JD7qNzRkFuBpEa6QvbQ0SjGvoe36SrkzXh/9kuvjf5bv3zGmwFsG2kFPaDAZAo8zthdBtk/qlHwJ+p145WlViYvv1AGsbpL90Xd4vwyUNLP+Us93L6e/mQFKA3PoRZFX6RHUZclZYypURcy3uB72WkQxWHK7gMMARsj9M6VWRhI6Cn4E+4owmabGArfjrChPUgmVtYZc+WNtgOd5Z9BSFpv+rfLcrHMMXGF/h8180ftt/uj7x4BGCLlNXXXXDXKK3pPKE76pdNMdBhd6Ws/O2yCmlgbvbzESs7fkp4gTJFZ1BNby4wE/hjOqsksjdKYU4i0ze8Y1fBSEdmF90dGZMhyYSg3dsESlwNbc3/QI6FOUlmv26qDgmdWNx6F49gqmIUlR+NMP3SNM4yngwO2eBbTIWJWdfv8ZR9Jw6vnaF8pzUvOZCCFqZvnmc46xpXnPnM="
 git:
   # hack around git fetch --unshallow failing and nuking the whole CI
