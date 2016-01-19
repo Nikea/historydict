@@ -1,7 +1,7 @@
 [![Build
 Status](https://travis-ci.org/Nikea/historydict.svg?branch=master)](https://travis-ci.org/Nikea/historydict)
 [![codecov.io](http://codecov.io/github/Nikea/historydict/coverage.svg?branch=master)](http://codecov.io/github/Nikea/historydict?branch=master)
-
+[![Anaconda-Server Badge](https://anaconda.org/lightsource2/historydict/badges/version.svg)](https://anaconda.org/lightsource2/historydict)
 # HistoryDict
 
 HistoryDict is a light weight mapping backed by sqlite which remember the
