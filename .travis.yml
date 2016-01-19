@@ -15,19 +15,11 @@ before_install:
   - ls -la ~/
   - cat ~/.bashrc
   - env
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b -p /home/travis/mc
-  # apparently miniconda.sh was being packaged with the conda package... why?
-  # Dunno, so I'm removing it...
-  - rm miniconda.sh
-  - export PATH=/home/travis/mc/bin:$PATH
-  # install packages required for building and uploading
-  - conda install --yes anaconda-client
-  # fetch a custom condarc for building and uploading to anaconda.org.
-  - wget https://gist.githubusercontent.com/ericdill/960e933953eee6d428b0/raw/b468527d9eea692b1ca68263f7f59084f80ac3cc/.condarc -O ~/.condarc
-  - conda install --yes conda-build=1.18.1 anaconda-client
-  - export CONDA_BUILD_COMMAND="conda-build . --python=$TRAVIS_PYTHON_VERSION"
+  - wget https://gist.githubusercontent.com/ericdill/613e015ad558b9149d33/raw/install-miniconda.sh
+  - bash install-miniconda.sh
+  - source ~/.bashrc
+  - env
+  - cat ~/.bashrc
 install:
   - python setup.py install
   - pip install six pytest pytest-cov
@@ -40,7 +32,7 @@ script:
 
 after_success:
   - coveralls
-  - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) && ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'master' ) ]] ; then
+  - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) && ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'auto-build-on-travis' ) ]] ; then
       anaconda -t ${BINSTAR_TOKEN} upload $($CONDA_BUILD_COMMAND --output) -u lightsource2 -c development --force;
     fi;
 
