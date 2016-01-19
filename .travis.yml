@@ -10,6 +10,7 @@ python:
   - 3.4
   - 3.5
   - "nightly"
+
 before_install:
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
@@ -34,7 +35,7 @@ script:
 after_success:
   - coveralls
   - if [[ ( "$TRAVIS_PYTHON_VERSION" != 'nightly' ) && ( "$TRAVIS_PULL_REQUEST" == 'false' ) && ( "$TRAVIS_BRANCH" == 'auto-build-on-travis' ) ]] ; then
-      anaconda -t ${BINSTAR_TOKEN} upload $(conda build --output) -u lightsource2 -c development --force;
+      anaconda -t ${BINSTAR_TOKEN} upload $(conda build . --output) -u lightsource2 -c development --force;
     fi;
 
 
