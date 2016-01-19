@@ -23,6 +23,7 @@ before_install:
   - chmod +x ~/scripts/*.sh
   # install miniconda/anaconda-client/conda-build
   - . ~/scripts/install-miniconda.sh
+  - conda install nose
 
 install:
   - python setup.py install
