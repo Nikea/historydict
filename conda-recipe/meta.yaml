@@ -3,7 +3,7 @@ package:
   version: {{ environ['GIT_DESCRIBE_TAG'] }}.post{{ environ['GIT_DESCRIBE_NUMBER'] }}
 
 source:
-  git_url: ./
+  git_url: ../
 
 # build:
   # Note that this will override the default build string with the Python

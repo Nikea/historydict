@@ -12,18 +12,11 @@ python:
   - "nightly"
 
 before_install:
-  - ls -la ~/
-  - cat ~/.bashrc
-  - env
   - wget https://gist.githubusercontent.com/ericdill/613e015ad558b9149d33/raw/install-miniconda.sh
   - chmod +x install-miniconda.sh
   - . install-miniconda.sh
-  - echo "$CONDA_BUILD_COMMAND"
-  # - bash install-miniconda.sh
-  - source ~/.bashrc
-  - echo "$CONDA_BUILD_COMMAND"
-  - env
-  - cat ~/.bashrc
+  - git fetch --unshallow
+  # - source ~/.bashrc
 install:
   - python setup.py install
   - pip install six pytest pytest-cov
