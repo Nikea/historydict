@@ -116,9 +116,9 @@ def test_get():
 
 def test_protected_key():
     with pytest.raises(ValueError):
-        h.__getitem__(HistoryDict.RESERVED_KEY_KEY)
+        h[HistoryDict.RESERVED_KEY_KEY]
     with pytest.raises(ValueError):
-        h.__setitem__(HistoryDict.RESERVED_KEY_KEY, 'aardvark')
+        h[HistoryDict.RESERVED_KEY_KEY] = 'aardvark'
 
 
 def test_repr():
