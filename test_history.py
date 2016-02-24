@@ -1,3 +1,4 @@
+import tempfile
 from historydict import HistoryDict
 import tempfile
 import pytest
@@ -130,3 +131,18 @@ def test_repr():
         h[k] = v
     assert repr(dict(h)) == repr(h)
     assert dict(h) == dct
+
+
+def test_flush():
+    f = tempfile.NamedTemporaryFile()
+    g = HistoryDict(f.name)
+    g['k'] = {'a': 1}
+    g['k']['a'] = 2
+    # Check that mutated value persists.
+    del g
+    g = HistoryDict(f.name)
+    assert g['k']['a'] == 2
+
+    # finally smoke test the API
+    g.flush()
+    g._flush('k')

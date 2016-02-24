@@ -90,6 +90,7 @@ class HistoryDict(MutableMapping):
     def __delitem__(self, key):
         if key not in self:
             raise KeyError(key)
+        self._flush(key)
         cur_keys = list(self._cache)
         cur_keys.remove(key)
         self._put(self.RESERVED_KEY_KEY, cur_keys)
@@ -164,6 +165,19 @@ class HistoryDict(MutableMapping):
         self._conn.execute(DELETE_ALL_QUERY)
         self._put(self.RESERVED_KEY_KEY, [])
         self._cache.clear()
+
+    def flush(self):
+        """
+        Ensure any mutable values are updated on disk.
+        """
+        [self._flush(key) for key in self]
+
+    def _flush(self, key):
+        value = self[key]
+        self[key] = value
+
+    def __del__(self):
+        self.flush()
 
     def trim(self, N=1):
         """
