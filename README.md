@@ -63,6 +63,10 @@ Out[14]: 'foo'
 
 All `MutableMapping` methods work.
 
+There is also a `flush` method, which ensures that any mutable values such as
+dicts or lists are synced with the underlying file. This method is
+automatically called when a `HistoryDict` object is deleted, but it can be
+called manually be the user at any time.
 
 ## Known limitation
 
