@@ -1,6 +1,5 @@
 import tempfile
 from historydict import HistoryDict
-import tempfile
 import pytest
 OBJ_ID_LEN = 36
 h = None
