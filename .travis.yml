@@ -25,8 +25,10 @@ before_install:
   - . ~/scripts/install-miniconda.sh
 
 install:
+  - conda create -n testenv python=$TRAVIS_PYTHON_VERSION pytest
+  - source activate testenv
+  - pip install pytest-cov
   - python setup.py install
-  - pip install six pytest pytest-cov
 
 script:
   - py.test --cov=historydict --cov-report term-missing
