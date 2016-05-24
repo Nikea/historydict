@@ -131,17 +131,17 @@ def test_repr():
     assert repr(dict(h)) == repr(h)
     assert dict(h) == dct
 
-
 def test_flush():
-    f = tempfile.NamedTemporaryFile()
-    g = HistoryDict(f.name)
-    g['k'] = {'a': 1}
-    g['k']['a'] = 2
-    # Check that mutated value persists.
-    del g
-    g = HistoryDict(f.name)
-    assert g['k']['a'] == 2
+    with tempfile.NamedTemporaryFile(delete=False) as fn:
+        # Needed for windows compatibility
+        g = HistoryDict(fn.name)
+        g['k'] = {'a': 1}
+        g['k']['a'] = 2
+        # Check that mutated value persists.
+        del g
+        g = HistoryDict(fn.name)
+        assert g['k']['a'] == 2
 
-    # finally smoke test the API
-    g.flush()
-    g._flush('k')
+        # finally smoke test the API
+        g.flush()
+        g._flush('k')
