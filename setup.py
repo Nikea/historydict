@@ -7,5 +7,4 @@ setup(name='historydict',
       description='A persistent dictionary with history backed by sqlite',
       url='http://github.com/Nikea/historydict',
       platforms='Cross platform (Linux, Mac OSX, Windows)',
-      requires=['six']
       )

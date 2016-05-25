@@ -7,9 +7,7 @@
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-import six
-import atexit
-import weakref
+import sys
 import logging
 import hashlib
 import sqlite3
@@ -69,7 +67,10 @@ class HistoryDict(MutableMapping):
         for k in self._keys:
             self._cache[k] = self.past(k)
 
-        atexit.register(weakref.WeakMethod(self.flush))
+        if sys.version_info[0] > 2:
+            import weakref
+            import atexit
+            atexit.register(weakref.WeakMethod(self.flush))
 
     def __repr__(self):
         return repr(dict(self))
