@@ -8,11 +8,15 @@ HistoryDict is a light weight mapping backed by sqlite which remember the
 history of values.  The intent is for tracking relatively complex
 configurations.
 
+
 ## Conda Recipes
 
-[tag](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/historydict)
+Install the most recent tagged build: `conda install historydict -c lightsource2-tag`
 
-[dev](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/historydict)
+Install the most recent tagged build: `conda install historydict -c lightsource2-dev`
+
+Find the tagged recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/historydict) and the dev recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/historydict)
+
 
 ## Examples
 
