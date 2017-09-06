@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='historydict',
-      version='1.1.0',
+      version='1.2.1',
       author='Brookhaven National Laboratory',
       py_modules=['historydict'],
       description='A persistent dictionary with history backed by sqlite',
