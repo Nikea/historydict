@@ -102,6 +102,7 @@ class HistoryDict(MutableMapping):
         del self._cache[key]
         hk = hashlib.sha1(str(key).encode('utf-8')).hexdigest()
         self._conn.execute(DELETE_ONE_QUERY, (hk,))
+        self._conn.commit()
 
     def __len__(self):
         return len(self._cache)
