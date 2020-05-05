@@ -12,7 +12,10 @@ import logging
 import hashlib
 import sqlite3
 import json
-from collections import MutableMapping
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 logger = logging.getLogger(__name__)
 
