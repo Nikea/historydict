@@ -1,7 +1,5 @@
-[![Build
-Status](https://travis-ci.org/Nikea/historydict.svg?branch=master)](https://travis-ci.org/Nikea/historydict)
-[![codecov.io](http://codecov.io/github/Nikea/historydict/coverage.svg?branch=master)](http://codecov.io/github/Nikea/historydict?branch=master)
-[![Anaconda-Server Badge](https://anaconda.org/lightsource2/historydict/badges/version.svg)](https://anaconda.org/lightsource2/historydict)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/historydict/badges/version.svg)](https://anaconda.org/conda-forge/historydict)
+
 # HistoryDict
 
 HistoryDict is a light weight mapping backed by sqlite which remember the
@@ -11,11 +9,10 @@ configurations.
 
 ## Conda Recipes
 
-Install the most recent tagged build: `conda install historydict -c lightsource2-tag`
+Install the most recent tagged build: `conda install historydict -c conda-forge`
 
-Install the most recent tagged build: `conda install historydict -c lightsource2-dev`
+conda-forge feedstock: https://github.com/conda-forge/historydict-feedstock
 
-Find the tagged recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/historydict) and the dev recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/historydict)
 
 
 ## Examples
