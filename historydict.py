@@ -17,6 +17,8 @@ try:
 except ImportError:
     from collections import MutableMapping
 
+__version__ = '1.2.6'
+
 logger = logging.getLogger(__name__)
 
 
